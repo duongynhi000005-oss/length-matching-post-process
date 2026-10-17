@@ -1,29 +1,33 @@
 # Features
 
-No length-matching features are supported yet. Version `0.0.1` is an integration
-scaffold: it validates and snapshots routed Simple Route JSON but intentionally
-does not alter route geometry.
+## Coordinated differential-pair length matching
 
-## Planned features
+Evaluates all supplied differential pairs in a single solver invocation,
+measures centerline trace lengths (including `1.6 mm` per layer transition),
+inserts collision-free serpentine meanders on shorter pair members, and
+reroutes both members when needed while treating non-pair traces and fixed PCB
+obstacles as immutable.
 
-### Single-meander length matching
+Feature flag: `enableLengthMatching` on `DifferentialPairSolverOptions`
+(defaults to `true`).
 
-Add a meander to the shorter member of a differential pair when the existing
-route has enough usable space to satisfy the configured length tolerance.
+- [lengthens a shorter pair member deterministically](tests/features/coordinated-differential-pair-length-matching/success/lengthens-shorter-member.test.ts)
+- [coordinates multiple pairs and reroutes both members](tests/features/coordinated-differential-pair-length-matching/success/coordinates-multiple-pairs-and-reroutes-both.test.ts)
+- [supports disabling length matching via feature flag](tests/features/coordinated-differential-pair-length-matching/success/feature-flag-disables-length-matching.test.ts)
+- [fails atomically when geometry cannot satisfy tolerance](tests/features/coordinated-differential-pair-length-matching/failure/unsolvable-geometry-throws-atomically.test.ts)
 
-Status: not implemented.
+## Explicit differential-pair constraints
 
-### Rerouting with meanders
+Validates explicit `DifferentialPairConstraints` entries and checks
+compatibility with optional deprecated `simpleRouteJson.differentialPairs`.
 
-Reroute either or both members of a differential pair to create room for
-meanders while treating unrelated traces and fixed PCB geometry as immutable
-obstacles.
+- [retains every supplied pair as solver context](tests/features/explicit-differential-pair-constraints/success/constructor-params.test.ts)
+- [rejects unknown connection references](tests/features/explicit-differential-pair-constraints/failure/unknown-connection.test.ts)
 
-Status: not implemented.
+## Routed SRJ pass-through and immutability
 
-## Scaffold contract tests
+Preserves complete Simple Route JSON structure and guarantees input/output
+independence.
 
-The initial release is covered by contract tests rather than feature tests:
-
-- [returns an independent no-op output](tests/features/routed-srj-pass-through/success/output-cloning.test.ts)
-- [rejects invalid pair constraints](tests/features/explicit-differential-pair-constraints/failure/unknown-connection.test.ts)
+- [returns an independent SRJ output](tests/features/routed-srj-pass-through/success/output-cloning.test.ts)
+- [requires solve before getOutput](tests/features/routed-srj-pass-through/failure/output-before-solve.test.ts)
