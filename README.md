@@ -9,11 +9,16 @@ planned user-facing length-matching capabilities.
 
 ## Initial no-op release
 
-Version `0.0.1` establishes the package and core integration contract. It
-validates the input, preserves it without changing route geometry, and returns a
-structurally independent complete Simple Route JSON object. Coordinated
-length-matching and meander generation will replace the marked implementation
-boundary in a later release.
+Version `0.0.1` establishes the package and core integration contract tracked in
+[issue #1](https://github.com/tscircuit/length-matching-post-process/issues/1).
+It validates the input, preserves it without changing route geometry, and
+returns a structurally independent complete Simple Route JSON object.
+Coordinated length-matching and meander generation will replace the marked
+implementation boundary in a later release.
+
+Downstream consumers (`@tscircuit/core`) should consume a published package
+version or pinned Git commit rather than committing machine-specific `file:` or
+`link:` worktree paths.
 
 ## Install from GitHub
 

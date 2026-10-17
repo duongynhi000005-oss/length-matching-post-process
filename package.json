@@ -14,6 +14,7 @@
     }
   },
   "files": [
+    "dist",
     "lib",
     "README.md",
     "FEATURES.md"
@@ -21,6 +22,7 @@
   "scripts": {
     "start": "cosmos",
     "build": "tsup lib/index.ts --format esm --dts --sourcemap --clean",
+    "prepublishOnly": "bun run build",
     "build:playground": "vite build",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
